@@ -5,20 +5,29 @@ import { zustandStorage } from "./storage";
 
 type TaskStore = {
   tasks: Task[];
-  addTask: (task: Omit<Task, "id">) => void;
+  insertTask: (task: Omit<Task, "id" | "completed">) => void;
+  setTaskCompletionStatus: (taskId: string, completed: boolean) => void;
 };
 
 export const useTaskStore = create<TaskStore>()(
   persist(
     (set) => ({
       tasks: [],
-      addTask: (task: Omit<Task, "id">) => {
+      insertTask: (task: Omit<Task, "id" | "completed">) => {
         const newTask: Task = {
           ...task,
+          completed: false,
           id:
             Date.now().toString() + Math.random().toString(36).substring(2, 9),
         };
         set((state) => ({ tasks: [...state.tasks, newTask] }));
+      },
+      setTaskCompletionStatus: (taskId: string, completed: boolean) => {
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === taskId ? { ...task, completed } : task,
+          ),
+        }));
       },
     }),
     {

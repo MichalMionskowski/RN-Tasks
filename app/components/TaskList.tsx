@@ -1,6 +1,7 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import { useTaskStore } from "../store";
+import Task from "./Task";
 
 export default function TaskList() {
   const taskList = useTaskStore((state) => state.tasks);
@@ -11,7 +12,7 @@ export default function TaskList() {
         data={taskList}
         keyExtractor={(task) => task.id}
         renderItem={({ item }) => {
-          return <Text>{item.title}</Text>;
+          return <Task task={item}></Task>;
         }}
       />
     </View>

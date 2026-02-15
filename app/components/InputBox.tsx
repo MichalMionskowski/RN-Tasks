@@ -7,7 +7,7 @@ interface Props {
 }
 
 export default function InputBox({ text, handleText }: Props) {
-  const addTask = useTaskStore((state) => state.addTask);
+  const addTask = useTaskStore((state) => state.insertTask);
 
   return (
     <View style={styles.inputComponent}>
