@@ -3,5 +3,6 @@ export interface TaskProp {
 }
 
 export type Task = {
+  id: string;
   title: string;
 };

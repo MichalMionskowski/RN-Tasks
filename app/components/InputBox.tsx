@@ -1,17 +1,14 @@
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
-import { Task } from "./Task";
+import { useTaskStore } from "../store";
 
 interface Props {
   text: string;
   handleText: (text: string) => void;
-  handleAddTask: (prop: Task) => void;
 }
 
-export default function InputBox({
-  text,
-  handleText,
-  handleAddTask: handleAddPress,
-}: Props) {
+export default function InputBox({ text, handleText }: Props) {
+  const addTask = useTaskStore((state) => state.addTask);
+
   return (
     <View style={styles.inputComponent}>
       <Text style={styles.inputText}>Write task name</Text>
@@ -20,7 +17,7 @@ export default function InputBox({
         value={text}
         onChange={(e) => handleText(e.nativeEvent.text)}
       />
-      <Button title="go ons" onPress={() => handleAddPress({ title: text })} />;
+      <Button title="go ons" onPress={() => addTask({ title: text })} />
     </View>
   );
 }

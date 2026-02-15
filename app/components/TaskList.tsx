@@ -1,17 +1,15 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { Task } from "./Task";
+import { useTaskStore } from "../store";
 
-interface Props {
-  taskList: Task[];
-}
+export default function TaskList() {
+  const taskList = useTaskStore((state) => state.tasks);
 
-export default function TaskList({ taskList }: Props) {
   return (
     <View style={styles.taskColumn}>
       <FlatList
         data={taskList}
-        keyExtractor={(task) => task.title}
+        keyExtractor={(task) => task.id}
         renderItem={({ item }) => {
           return <Text>{item.title}</Text>;
         }}
