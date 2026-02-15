@@ -1,9 +1,22 @@
 import { useState } from "react";
-import { Text, View } from "react-native";
-import { InputBox } from "./components/InputBox";
+import { View } from "react-native";
+import InputBox from "./components/InputBox";
+import { Task } from "./components/Task";
+import TaskList from "./components/TaskList";
 
 export default function Index() {
   const [newNoteText, setNewNoteText] = useState("");
+  const [tasklist, setTaskList] = useState<Task[]>([]);
+
+  const handleAddTask = (task: Task) => {
+    console.log(task);
+
+    setTaskList((prev) => {
+      console.log(prev);
+      return [...prev, task];
+    });
+  };
+
   return (
     <View
       style={{
@@ -12,11 +25,12 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
       <InputBox
         text={newNoteText}
-        handleText={(text) => setNewNoteText(text)}
+        handleText={setNewNoteText}
+        handleAddTask={handleAddTask}
       />
+      <TaskList taskList={tasklist}></TaskList>
     </View>
   );
 }

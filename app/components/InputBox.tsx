@@ -1,11 +1,17 @@
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Task } from "./Task";
 
 interface Props {
   text: string;
   handleText: (text: string) => void;
+  handleAddTask: (prop: Task) => void;
 }
 
-export function InputBox({ text, handleText }: Props) {
+export default function InputBox({
+  text,
+  handleText,
+  handleAddTask: handleAddPress,
+}: Props) {
   return (
     <View style={styles.inputComponent}>
       <Text style={styles.inputText}>Write task name</Text>
@@ -14,7 +20,7 @@ export function InputBox({ text, handleText }: Props) {
         value={text}
         onChange={(e) => handleText(e.nativeEvent.text)}
       />
-      ;
+      <Button title="go ons" onPress={() => handleAddPress({ title: text })} />;
     </View>
   );
 }
