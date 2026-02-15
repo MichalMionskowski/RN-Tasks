@@ -21,7 +21,9 @@ export default function TaskList() {
 
 const styles = StyleSheet.create({
   taskColumn: {
-    flex: 1,
+    flex: 5,
     flexDirection: "column",
+    height: "100%",
+    width: "100%",
   },
 });

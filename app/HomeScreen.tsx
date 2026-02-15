@@ -3,15 +3,16 @@ import { View } from "react-native";
 import InputBox from "./components/InputBox";
 import TaskList from "./components/TaskList";
 
-export default function Index() {
+export default function HomeScreen() {
   const [newNoteText, setNewNoteText] = useState("");
 
   return (
     <View
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: "flex-start",
+
+        backgroundColor: "#F5F5F7",
       }}
     >
       <InputBox text={newNoteText} handleText={setNewNoteText} />
