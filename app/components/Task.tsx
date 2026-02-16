@@ -1,5 +1,6 @@
+import { Ionicons } from "@expo/vector-icons";
 import Checkbox from "expo-checkbox";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useTaskStore } from "../store";
 
 export interface TaskProp {
@@ -16,6 +17,7 @@ export default function Task({ task }: TaskProp) {
   const setTaskCompleted = useTaskStore(
     (state) => state.setTaskCompletionStatus,
   );
+  const deleteTask = useTaskStore((state) => state.deleteTask);
 
   return (
     <View style={styles.taskCard}>
@@ -26,6 +28,9 @@ export default function Task({ task }: TaskProp) {
         value={task.completed}
         onValueChange={() => setTaskCompleted(task.id, !task.completed)}
       />
+      <Pressable onPress={() => deleteTask(task.id)} style={styles.deleteButton}>
+        <Ionicons name="trash-outline" size={20} color="#FF3B30" />
+      </Pressable>
     </View>
   );
 }
@@ -59,5 +64,9 @@ const styles = StyleSheet.create({
     textDecorationLine: "line-through",
     color: "#999",
     opacity: 0.6,
+  },
+  deleteButton: {
+    marginLeft: 8,
+    padding: 4,
   },
 });

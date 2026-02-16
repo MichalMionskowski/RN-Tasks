@@ -7,6 +7,7 @@ type TaskStore = {
   tasks: Task[];
   insertTask: (task: Omit<Task, "id" | "completed">) => void;
   setTaskCompletionStatus: (taskId: string, completed: boolean) => void;
+  deleteTask: (taskId: string) => void;
 };
 
 export const useTaskStore = create<TaskStore>()(
@@ -27,6 +28,11 @@ export const useTaskStore = create<TaskStore>()(
           tasks: state.tasks.map((task) =>
             task.id === taskId ? { ...task, completed } : task,
           ),
+        }));
+      },
+      deleteTask: (taskId: string) => {
+        set((state) => ({
+          tasks: state.tasks.filter((task) => task.id !== taskId),
         }));
       },
     }),
