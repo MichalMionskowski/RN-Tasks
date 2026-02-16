@@ -1,5 +1,6 @@
-import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import { useTaskStore } from "../store";
+import { styles } from "../theme/styles";
 
 interface Props {
   text: string;
@@ -12,45 +13,29 @@ export default function InputBox({ text, handleText }: Props) {
   return (
     <View style={styles.mainComponent}>
       <View style={styles.inputComponent}>
-        <Text style={styles.inputText}>Write task name</Text>
+        <Text style={styles.inputText}>Task:</Text>
         <TextInput
           style={styles.inputBox}
           value={text}
           onChange={(e) => handleText(e.nativeEvent.text)}
+          placeholder="Enter task name..."
+          placeholderTextColor="#999"
         />
       </View>
 
-      <View style={styles.buttom}>
-        <Button title="Add Task" onPress={() => addTask({ title: text })} />
-      </View>
+      <Pressable
+        style={({ pressed }) => [
+          styles.button,
+          pressed && styles.buttonPressed,
+        ]}
+        onPress={() => {
+          if (text === "") return;
+          handleText("");
+          addTask({ title: text });
+        }}
+      >
+        <Text style={styles.buttonText}>Add Task</Text>
+      </Pressable>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  inputText: {
-    flex: 1,
-  },
-  inputBox: {
-    flex: 2,
-    borderWidth: 2,
-    alignItems: "baseline",
-    borderColor: "black",
-  },
-
-  inputComponent: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingBottom: 10,
-  },
-
-  mainComponent: {
-    paddingHorizontal: 10,
-    paddingBottom: 20,
-  },
-
-  buttom: {
-    paddingHorizontal: 30,
-  },
-});

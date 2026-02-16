@@ -3,7 +3,11 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { useTaskStore } from "../store";
 import Task from "./Task";
 
-export default function TaskList() {
+interface taskListProp {
+  navigateToDetails: (taskId: string) => void;
+}
+
+export default function TaskList({ navigateToDetails }: taskListProp) {
   const taskList = useTaskStore((state) => state.tasks);
 
   return (
@@ -12,7 +16,7 @@ export default function TaskList() {
         data={taskList}
         keyExtractor={(task) => task.id}
         renderItem={({ item }) => {
-          return <Task task={item}></Task>;
+          return <Task task={item} onTaskClick={navigateToDetails}></Task>;
         }}
       />
     </View>

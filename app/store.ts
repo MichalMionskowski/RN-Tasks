@@ -1,12 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { Task } from "./components/Task";
+import { TaskDetail } from "./components/TaskDetail";
 import { zustandStorage } from "./storage";
 
 type TaskStore = {
-  tasks: Task[];
-  insertTask: (task: Omit<Task, "id" | "completed">) => void;
+  tasks: TaskDetail[];
+  insertTask: (task: Omit<TaskDetail, "id" | "completed">) => void;
   setTaskCompletionStatus: (taskId: string, completed: boolean) => void;
+  setTaskDescription: (taskId: string, description: string) => void;
   deleteTask: (taskId: string) => void;
 };
 
@@ -14,8 +15,8 @@ export const useTaskStore = create<TaskStore>()(
   persist(
     (set) => ({
       tasks: [],
-      insertTask: (task: Omit<Task, "id" | "completed">) => {
-        const newTask: Task = {
+      insertTask: (task: Omit<TaskDetail, "id" | "completed">) => {
+        const newTask: TaskDetail = {
           ...task,
           completed: false,
           id:
@@ -33,6 +34,13 @@ export const useTaskStore = create<TaskStore>()(
       deleteTask: (taskId: string) => {
         set((state) => ({
           tasks: state.tasks.filter((task) => task.id !== taskId),
+        }));
+      },
+      setTaskDescription: (taskId: string, description: string) => {
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === taskId ? { ...task, description } : task,
+          ),
         }));
       },
     }),

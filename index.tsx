@@ -4,8 +4,7 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 import HomeScreen from "./app/HomeScreen";
-
-const Stack = createNativeStackNavigator();
+import { TaskDetailScreen } from "./app/components/TaskDetail";
 
 export default function App() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -13,28 +12,35 @@ export default function App() {
     <>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={() => <HomeScreen />} />
-          <Stack.Screen name="Details" component={() => <></>} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Details" component={TaskDetailScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </>
   );
 }
 
+export const ScreenNames = {
+  Home: "Home",
+  Details: "Details",
+} as const;
+
 type RootStackParamList = {
-  Home: undefined;
-  Details: DetailScreenNavigationProps;
+  [ScreenNames.Home]: undefined;
+  [ScreenNames.Details]: DetailScreenNavigationProps;
 };
 
 type DetailScreenNavigationProps = {
   taskId: String;
 };
-type TaskListNavigationProp = NativeStackScreenProps<
+type HomeNavigationProp = NativeStackScreenProps<
   RootStackParamList,
-  "Home"
+  typeof ScreenNames.Home
 >;
 
 type TaskDetailsNavigationProp = NativeStackScreenProps<
   RootStackParamList,
-  "Details"
+  typeof ScreenNames.Details
 >;
+
+export type { HomeNavigationProp, TaskDetailsNavigationProp };
