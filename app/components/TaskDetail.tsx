@@ -4,6 +4,7 @@ import { useState } from "react";
 import {
   Modal,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -33,8 +34,8 @@ export function TaskDetailScreen({ route }: TaskDetailsNavigationProp) {
   );
 
   return (
-    <View
-      style={[
+    <ScrollView
+      contentContainerStyle={[
         detailStyles.mainContainer,
         { backgroundColor: taskDetails?.color?.hex || "#F1F5F7" },
       ]}
@@ -63,7 +64,7 @@ export function TaskDetailScreen({ route }: TaskDetailsNavigationProp) {
       <View style={mainStyles.card}>
         <ColorPicker taskId={taskDetails?.id || ""} />
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -276,11 +277,12 @@ const styles = StyleSheet.create({
 
 const detailStyles = StyleSheet.create({
   mainContainer: {
+    justifyContent: "flex-start",
+    rowGap: 20,
+    paddingBottom: 30,
     flex: 1,
     padding: 20,
-    rowGap: 20,
     backgroundColor: "#F1F5F7",
-    justifyContent: "flex-start",
   },
 
   titleContainer: {

@@ -18,59 +18,93 @@ function PickerComponent({ taskId }: { taskId: string }) {
     setSeletedColor(taskId, color);
   };
   const animation = useRef(new Animated.Value(0)).current;
+  const [contentHeight, setContentHeight] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
+
   const toggleDropdown = () => {
+    if (contentHeight === null) return; // Wait for measurement
+
     Animated.timing(animation, {
       toValue: open ? 0 : 1,
       duration: 250,
-      useNativeDriver: false, // height can't use native driver
+      useNativeDriver: false,
     }).start();
 
     setOpen(!open);
   };
-  const colorDropdown = (
-    <>
-      {Object.values(TaskColorChoice).map((color) => (
-        <View key={color.hex} style={styles.row}>
-          <Text
-            onPress={() => {
-              handleSelectedColor(taskId, color);
-            }}
-          >
-            {color.name}
-          </Text>
-          <View
-            style={{
-              backgroundColor: color.hex,
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-            }}
-          />
-        </View>
-      ))}
-    </>
-  );
+
+  const animatedHeight =
+    contentHeight !== null
+      ? animation.interpolate({
+          inputRange: [0, 1],
+          outputRange: [0, contentHeight],
+        })
+      : 0;
+
   return (
     <View style={{ marginTop: 20 }}>
       <Pressable onPress={toggleDropdown}>
         <Text>PickerComponent</Text>
       </Pressable>
-      {
+
+      {contentHeight === null && (
+        <View
+          style={{ position: "absolute", opacity: 0 }}
+          onLayout={(e) => {
+            setContentHeight(e.nativeEvent.layout.height);
+          }}
+        >
+          <View style={{ padding: 10, rowGap: 10 }}>
+            {Object.values(TaskColorChoice).map((color) => (
+              <View key={color.hex} style={styles.row}>
+                <Text>{color.name}</Text>
+                <View
+                  style={{
+                    backgroundColor: color.hex,
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                  }}
+                />
+              </View>
+            ))}
+          </View>
+        </View>
+      )}
+
+      {contentHeight !== null && (
         <Animated.View
           style={[
             styles.dropdown,
             {
-              height: animation.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, 240], // Adjust based on content height
-              }),
+              height: animatedHeight,
+              overflow: "hidden",
             },
           ]}
         >
-          {colorDropdown}
+          <View style={{ padding: 10, rowGap: 10 }}>
+            {Object.values(TaskColorChoice).map((color) => (
+              <View key={color.hex} style={styles.row}>
+                <Text
+                  onPress={() => {
+                    handleSelectedColor(taskId, color);
+                  }}
+                >
+                  {color.name}
+                </Text>
+                <View
+                  style={{
+                    backgroundColor: color.hex,
+                    width: 40,
+                    height: 40,
+                    borderRadius: 20,
+                  }}
+                />
+              </View>
+            ))}
+          </View>
         </Animated.View>
-      }
+      )}
     </View>
   );
 }

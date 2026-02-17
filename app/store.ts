@@ -45,7 +45,7 @@ export const useTaskStore = create<TaskStore>()(
           ),
         }));
       },
-      setSelectedColor: (taskId: string, color: TaskColorChoice) => {
+      setSelectedColor: (taskId: string, color: TaskColor) => {
         set((state) => ({
           tasks: state.tasks.map((task) =>
             task.id === taskId ? { ...task, color } : task,

@@ -99,9 +99,10 @@ export const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
   },
   dropdown: {
-    overflow: "hidden",
     backgroundColor: "white",
+    height: "auto",
     marginTop: 8,
     borderRadius: 8,
+    overflow: "hidden",
   },
 });

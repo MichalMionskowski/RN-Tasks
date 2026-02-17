@@ -36,16 +36,18 @@ export default function Task({ task, onTaskClick }: TaskProp) {
         </Text>
       </Pressable>
 
-      <Checkbox
-        value={task.completed}
-        onValueChange={() => setTaskCompleted(task.id, !task.completed)}
-      />
-      <Pressable
-        onPress={() => deleteTask(task.id)}
-        style={styles.deleteButton}
-      >
-        <Ionicons name="trash-outline" size={20} color="#FF3B30" />
-      </Pressable>
+      <View style={styles.row}>
+        <Checkbox
+          value={task.completed}
+          onValueChange={() => setTaskCompleted(task.id, !task.completed)}
+        />
+        <Pressable
+          onPress={() => deleteTask(task.id)}
+          style={styles.deleteButton}
+        >
+          <Ionicons name="trash-outline" size={20} color="#FF3B30" />
+        </Pressable>
+      </View>
     </View>
   );
 }
