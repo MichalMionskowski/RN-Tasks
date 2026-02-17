@@ -3,6 +3,7 @@ import Checkbox from "expo-checkbox";
 import { Pressable, Text, View } from "react-native";
 import { useTaskStore } from "../store";
 import { styles } from "../theme/styles";
+import { TaskColor } from "./ColorPicker";
 
 export interface TaskProp {
   task: TaskBase;
@@ -13,7 +14,7 @@ export type TaskBase = {
   id: string;
   title: string;
   completed: boolean;
-  color?: number;
+  color?: TaskColor;
 };
 
 export default function Task({ task, onTaskClick }: TaskProp) {
@@ -23,7 +24,12 @@ export default function Task({ task, onTaskClick }: TaskProp) {
   const deleteTask = useTaskStore((state) => state.deleteTask);
 
   return (
-    <View style={styles.taskCard}>
+    <View
+      style={[
+        styles.taskCard,
+        { backgroundColor: task.color?.hex || "#F1F5F7" },
+      ]}
+    >
       <Pressable onPress={() => onTaskClick(task.id)}>
         <Text style={[styles.text, task.completed && styles.completedText]}>
           {task.title}

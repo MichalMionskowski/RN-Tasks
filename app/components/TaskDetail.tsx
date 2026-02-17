@@ -1,4 +1,5 @@
 import { TaskDetailsNavigationProp } from "@/index";
+import Checkbox from "expo-checkbox";
 import { useState } from "react";
 import {
   Modal,
@@ -9,6 +10,8 @@ import {
   View,
 } from "react-native";
 import { useTaskStore } from "../store";
+import { styles as mainStyles } from "../theme/styles";
+import ColorPicker from "./ColorPicker";
 import { TaskBase } from "./Task";
 
 export type TaskDetail = TaskBase & {
@@ -25,10 +28,28 @@ export function TaskDetailScreen({ route }: TaskDetailsNavigationProp) {
   const handleDescription = (taskId: string, text: string) => {
     setTaskDescription(taskId, text);
   };
+  const setTaskCompleted = useTaskStore(
+    (state) => state.setTaskCompletionStatus,
+  );
+
   return (
-    <View style={detailStyles.mainContainer}>
-      <View style={detailStyles.titleContainer}>
-        <Text style={detailStyles.titleLabel}>Task</Text>
+    <View
+      style={[
+        detailStyles.mainContainer,
+        { backgroundColor: taskDetails?.color?.hex || "#F1F5F7" },
+      ]}
+    >
+      <View style={[detailStyles.titleContainer, mainStyles.card]}>
+        <View style={detailStyles.titleWithCompletionWrapper}>
+          <Text style={detailStyles.titleLabel}>Task</Text>
+          <Checkbox
+            value={taskDetails?.completed || false}
+            onValueChange={(newValue) => {
+              if (!taskDetails) return;
+              setTaskCompleted(taskDetails.id, newValue);
+            }}
+          />
+        </View>
         <Text style={detailStyles.title}>{taskDetails?.title}</Text>
       </View>
       <DescriptionComponent
@@ -39,6 +60,9 @@ export function TaskDetailScreen({ route }: TaskDetailsNavigationProp) {
           handleDescription(taskDetails?.id || "", desc)
         }
       />
+      <View style={mainStyles.card}>
+        <ColorPicker taskId={taskDetails?.id || ""} />
+      </View>
     </View>
   );
 }
@@ -57,10 +81,10 @@ function DescriptionComponent({
 }: DescriptionComponentProps) {
   const [modalVisible, setModalVisible] = useState(false);
   return (
-    <View style={detailStyles.descriptionWrapper}>
+    <View>
       <Text style={detailStyles.sectionLabel}>Description</Text>
       {description ? (
-        <View style={detailStyles.descriptionDisplayContainer}>
+        <View style={[mainStyles.card]}>
           <Text style={detailStyles.descriptionText}>{description}</Text>
           <Pressable
             onPress={() => setModalVisible(true)}
@@ -73,6 +97,7 @@ function DescriptionComponent({
           </Pressable>
           {modalVisible && (
             <DetailsModal
+              initialDescription={description}
               modalClosed={() => setModalVisible(false)}
               onSave={(desc) => {
                 setModalVisible(false);
@@ -82,7 +107,7 @@ function DescriptionComponent({
           )}
         </View>
       ) : (
-        <View style={detailStyles.descriptionContainer}>
+        <View style={[detailStyles.descriptionContainer, mainStyles.card]}>
           <TextInput
             style={detailStyles.descriptionBox}
             value={text}
@@ -109,11 +134,16 @@ function DescriptionComponent({
 }
 
 interface DetailsModalProps {
+  initialDescription?: string;
   modalClosed: () => void;
   onSave: (description: string) => void;
 }
-function DetailsModal({ modalClosed, onSave }: DetailsModalProps) {
-  const [description, setDescription] = useState("");
+function DetailsModal({
+  initialDescription,
+  modalClosed,
+  onSave,
+}: DetailsModalProps) {
+  const [description, setDescription] = useState(initialDescription || "");
   return (
     <View style={styles.container}>
       <Modal
@@ -207,7 +237,7 @@ const styles = StyleSheet.create({
 
   modalButtons: {
     flexDirection: "row",
-    gap: 12,
+    rowGap: 12,
   },
 
   modalButton: {
@@ -248,19 +278,18 @@ const detailStyles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#F5F5F7",
+    rowGap: 20,
+    backgroundColor: "#F1F5F7",
+    justifyContent: "flex-start",
   },
 
   titleContainer: {
-    backgroundColor: "#FFF",
-    padding: 16,
-    borderRadius: 12,
     marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+  },
+  titleWithCompletionWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 
   titleLabel: {
@@ -292,14 +321,7 @@ const detailStyles = StyleSheet.create({
   },
 
   descriptionContainer: {
-    backgroundColor: "#FFF",
-    padding: 16,
-    borderRadius: 12,
-    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
 
   descriptionBox: {
@@ -312,17 +334,6 @@ const detailStyles = StyleSheet.create({
     backgroundColor: "#F9F9F9",
     minHeight: 120,
     marginBottom: 16,
-  },
-
-  descriptionDisplayContainer: {
-    backgroundColor: "#FFF",
-    padding: 16,
-    borderRadius: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
 
   descriptionText: {

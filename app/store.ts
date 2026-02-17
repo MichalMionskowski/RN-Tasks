@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { TaskColor } from "./components/ColorPicker";
 import { TaskDetail } from "./components/TaskDetail";
 import { zustandStorage } from "./storage";
 
@@ -8,6 +9,7 @@ type TaskStore = {
   insertTask: (task: Omit<TaskDetail, "id" | "completed">) => void;
   setTaskCompletionStatus: (taskId: string, completed: boolean) => void;
   setTaskDescription: (taskId: string, description: string) => void;
+  setSelectedColor: (taskId: string, color: TaskColor) => void;
   deleteTask: (taskId: string) => void;
 };
 
@@ -40,6 +42,13 @@ export const useTaskStore = create<TaskStore>()(
         set((state) => ({
           tasks: state.tasks.map((task) =>
             task.id === taskId ? { ...task, description } : task,
+          ),
+        }));
+      },
+      setSelectedColor: (taskId: string, color: TaskColorChoice) => {
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === taskId ? { ...task, color } : task,
           ),
         }));
       },

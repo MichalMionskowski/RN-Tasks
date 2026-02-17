@@ -83,4 +83,25 @@ export const styles = StyleSheet.create({
     marginLeft: 8,
     padding: 4,
   },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  card: {
+    backgroundColor: "#FFF",
+    padding: 16,
+    borderRadius: 12,
+    elevation: 3,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+  },
+  dropdown: {
+    overflow: "hidden",
+    backgroundColor: "white",
+    marginTop: 8,
+    borderRadius: 8,
+  },
 });
