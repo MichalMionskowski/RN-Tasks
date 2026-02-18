@@ -1,6 +1,6 @@
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import { useTaskStore } from "../store";
+import { FlatList, View } from "react-native";
+import { useTaskStore } from "../store/store";
 import Task from "./Task";
 
 interface taskListProp {
@@ -11,7 +11,7 @@ export default function TaskList({ navigateToDetails }: taskListProp) {
   const taskList = useTaskStore((state) => state.tasks);
 
   return (
-    <View style={styles.taskColumn}>
+    <View>
       <FlatList
         data={taskList}
         keyExtractor={(task) => task.id}
@@ -22,12 +22,3 @@ export default function TaskList({ navigateToDetails }: taskListProp) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  taskColumn: {
-    flex: 5,
-    flexDirection: "column",
-    height: "100%",
-    width: "100%",
-  },
-});

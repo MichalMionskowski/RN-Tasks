@@ -1,8 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { TaskColor } from "./components/ColorPicker";
-import { TaskDetail } from "./components/TaskDetail";
 import { zustandStorage } from "./storage";
+import { TaskColor, TaskDetail } from "./types";
 
 type TaskStore = {
   tasks: TaskDetail[];

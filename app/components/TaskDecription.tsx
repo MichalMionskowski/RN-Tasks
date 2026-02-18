@@ -1,85 +1,26 @@
-import { TaskDetailsNavigationProp } from "@/index";
-import Checkbox from "expo-checkbox";
 import { useState } from "react";
 import {
   Modal,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { useTaskStore } from "../store";
 import { styles as mainStyles } from "../theme/styles";
-import ColorPicker from "./ColorPicker";
-import { TaskBase } from "./Task";
 
-export type TaskDetail = TaskBase & {
-  description?: string;
-  createdAt?: string;
-};
-
-export function TaskDetailScreen({ route }: TaskDetailsNavigationProp) {
-  const taskDetails = useTaskStore((state) =>
-    state.tasks.find((task) => task.id === route.params.taskId),
-  );
-  const setTaskDescription = useTaskStore((state) => state.setTaskDescription);
-  const [description, setDescription] = useState("");
-  const handleDescription = (taskId: string, text: string) => {
-    setTaskDescription(taskId, text);
-  };
-  const setTaskCompleted = useTaskStore(
-    (state) => state.setTaskCompletionStatus,
-  );
-
-  return (
-    <ScrollView
-      contentContainerStyle={[
-        detailStyles.mainContainer,
-        { backgroundColor: taskDetails?.color?.hex || "#F1F5F7" },
-      ]}
-    >
-      <View style={[detailStyles.titleContainer, mainStyles.card]}>
-        <View style={detailStyles.titleWithCompletionWrapper}>
-          <Text style={detailStyles.titleLabel}>Task</Text>
-          <Checkbox
-            value={taskDetails?.completed || false}
-            onValueChange={(newValue) => {
-              if (!taskDetails) return;
-              setTaskCompleted(taskDetails.id, newValue);
-            }}
-          />
-        </View>
-        <Text style={detailStyles.title}>{taskDetails?.title}</Text>
-      </View>
-      <DescriptionComponent
-        description={taskDetails?.description || ""}
-        text={description}
-        onTextChange={setDescription}
-        setDescription={(desc: string) =>
-          handleDescription(taskDetails?.id || "", desc)
-        }
-      />
-      <View style={mainStyles.card}>
-        <ColorPicker taskId={taskDetails?.id || ""} />
-      </View>
-    </ScrollView>
-  );
-}
-
-interface DescriptionComponentProps {
+interface TaskDescriptionProps {
   description: string;
   text: string;
   onTextChange: (text: string) => void;
   setDescription: (description: string) => void;
 }
-function DescriptionComponent({
+export default function TaskDescription({
   description,
   text,
   onTextChange,
   setDescription,
-}: DescriptionComponentProps) {
+}: TaskDescriptionProps) {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View>
@@ -195,7 +136,6 @@ function DetailsModal({
     </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
 
@@ -276,18 +216,6 @@ const styles = StyleSheet.create({
 });
 
 const detailStyles = StyleSheet.create({
-  mainContainer: {
-    justifyContent: "flex-start",
-    rowGap: 20,
-    paddingBottom: 30,
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#F1F5F7",
-  },
-
-  titleContainer: {
-    marginBottom: 16,
-  },
   titleWithCompletionWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -301,12 +229,6 @@ const detailStyles = StyleSheet.create({
     marginBottom: 6,
     textTransform: "uppercase",
     letterSpacing: 0.5,
-  },
-
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#333",
   },
 
   descriptionWrapper: {

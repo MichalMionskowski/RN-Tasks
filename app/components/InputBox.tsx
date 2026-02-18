@@ -1,5 +1,5 @@
 import { Pressable, Text, TextInput, View } from "react-native";
-import { useTaskStore } from "../store";
+import { useTaskStore } from "../store/store";
 import { styles } from "../theme/styles";
 
 interface Props {

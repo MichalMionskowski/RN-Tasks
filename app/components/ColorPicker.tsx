@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Animated, Pressable, Text, View } from "react-native";
-import { useTaskStore } from "../store";
+import { useTaskStore } from "../store/store";
+import { TaskColor } from "../store/types";
 import { styles } from "../theme/styles";
 
 function ColorPicker({ taskId }: { taskId: string }) {
@@ -117,6 +118,5 @@ export const TaskColorChoice = {
   Lemon: { name: "Lemon", hex: "#FFFACD" },
 };
 export type TaskColorKey = keyof typeof TaskColorChoice;
-export type TaskColor = (typeof TaskColorChoice)[TaskColorKey];
 
 export default ColorPicker;
