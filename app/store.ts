@@ -12,7 +12,6 @@ type TaskStore = {
   setSelectedColor: (taskId: string, color: TaskColor) => void;
   deleteTask: (taskId: string) => void;
 };
-
 export const useTaskStore = create<TaskStore>()(
   persist(
     (set) => ({
