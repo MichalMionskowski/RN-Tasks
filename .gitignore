@@ -39,5 +39,13 @@ yarn-error.*
 app-example
 
 # generated native folders
-/ios
-/android
+# Uncommenting these would ignore native folders - but we're tracking them due to custom native modules
+# /ios
+# /android
+
+# Native build outputs
+android/app/build/
+android/build/
+android/.gradle/
+ios/build/
+ios/Pods/
