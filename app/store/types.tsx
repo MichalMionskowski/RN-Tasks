@@ -10,6 +10,7 @@ export type TaskBase = {
 export type TaskDetail = TaskBase & {
   description?: string;
   createdAt?: string;
+  dueDate?: string;
 };
 
 export type TaskColor = (typeof TaskColorChoice)[TaskColorKey];

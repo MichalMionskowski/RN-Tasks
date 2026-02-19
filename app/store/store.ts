@@ -9,6 +9,7 @@ type TaskStore = {
   setTaskCompletionStatus: (taskId: string, completed: boolean) => void;
   setTaskDescription: (taskId: string, description: string) => void;
   setSelectedColor: (taskId: string, color: TaskColor) => void;
+  setDueDate: (taskId: string, dueDate: string) => void;
   deleteTask: (taskId: string) => void;
 };
 export const useTaskStore = create<TaskStore>()(
@@ -47,6 +48,13 @@ export const useTaskStore = create<TaskStore>()(
         set((state) => ({
           tasks: state.tasks.map((task) =>
             task.id === taskId ? { ...task, color } : task,
+          ),
+        }));
+      },
+      setDueDate: (taskId: string, dueDate: string) => {
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === taskId ? { ...task, dueDate } : task,
           ),
         }));
       },

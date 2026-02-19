@@ -1,7 +1,7 @@
-import {} from "@/index";
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import ColorPicker from "../components/ColorPicker";
+import DatePicker from "../components/DatePicker";
 import TaskDescription from "../components/TaskDecription";
 import TaskHeader from "../components/TaskHeader";
 import { useTaskStore } from "../store/store";
@@ -17,6 +17,8 @@ export function TaskDetailScreen({ route }: TaskDetailsNavigationProp) {
   const handleDescription = (taskId: string, text: string) => {
     setTaskDescription(taskId, text);
   };
+  const setDueDate = useTaskStore((state) => state.setDueDate);
+
   const setTaskCompleted = useTaskStore(
     (state) => state.setTaskCompletionStatus,
   );
@@ -45,6 +47,15 @@ export function TaskDetailScreen({ route }: TaskDetailsNavigationProp) {
       <View style={mainStyles.card}>
         <ColorPicker taskId={taskDetails?.id || ""} />
       </View>
+      <DatePicker
+        value={new Date(taskDetails?.dueDate || new Date())}
+        onChange={(date) => {
+          // Handle date change
+          setDueDate(taskDetails?.id || "", date);
+        }}
+        mode="date"
+        label="Due Date"
+      />
     </ScrollView>
   );
 }
